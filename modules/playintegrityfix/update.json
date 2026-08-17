@@ -1,13 +1,13 @@
 {
   "id": "playintegrityfix",
-  "timestamp": 1786990118.0,
+  "timestamp": 1752360900.0,
   "versions": [
     {
-      "timestamp": 1786990118.0,
-      "version": "v19.1",
-      "versionCode": 19100,
-      "zipUrl": "https://github.com/chiteroman/PlayIntegrityFix/releases/download/v19.1/PlayIntegrityFix_v19.1.zip",
-      "changelog": "https://raw.githubusercontent.com/KOWX712/PlayIntegrityFix/main/changelog.md"
+      "timestamp": 1752360900.0,
+      "version": "v19.2",
+      "versionCode": 19200,
+      "zipUrl": "https://github.com/KOWX712/PlayIntegrityFix/releases/download/v19.2-Final/PlayIntegrityFix_v19.2.zip",
+      "changelog": "https://raw.githubusercontent.com/KOWX712/PlayIntegrityFix/main/CHANGELOG.md"
     }
   ]
 }
