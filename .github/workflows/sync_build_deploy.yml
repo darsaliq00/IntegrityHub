@@ -1,12 +1,24 @@
 name: sync-build-deploy
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: "0 */6 * * *"
 
+  workflow_dispatch:
+    inputs:
+      run_sync:
+        description: "Run Sync"
+        type: choice
+        required: true
+        default: "Yes"
+        options:
+          - "Yes"
+          - "No"
+
 permissions:
   contents: write
+  issues: write
+  pull-requests: write
   pages: write
   id-token: write
 
@@ -14,18 +26,23 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  IS_SYNC: ${{ inputs.run_sync == 'Yes' || github.event_name == 'schedule' }}
+
 jobs:
   sync:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       - name: Configure Git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -37,19 +54,27 @@ jobs:
           python -m pip install --upgrade pip
           pip install mmrl-util
 
+      - name: Show repository structure
+        run: |
+          echo "=== Repository ==="
+          find . -maxdepth 4 -type f | sort
+
       - name: Sync modules
+        if: ${{ env.IS_SYNC == 'true' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mmrl-util sync --diff versions_diff.md
 
       - name: Show generated module files
+        if: ${{ env.IS_SYNC == 'true' }}
         run: |
-          echo "=== modules directory ==="
+          echo "=== Modules directory ==="
           find modules -maxdepth 3 -type f | sort
 
           echo ""
           echo "=== PlayIntegrityFix update.json ==="
+
           if [ -f modules/playintegrityfix/update.json ]; then
             cat modules/playintegrityfix/update.json
           else
@@ -57,18 +82,25 @@ jobs:
             exit 1
           fi
 
+      - name: Show versions diff
+        if: ${{ env.IS_SYNC == 'true' }}
+        run: |
+          if [ -f versions_diff.md ]; then
+            echo "=== Versions Diff ==="
+            cat versions_diff.md
+          fi
+
       - name: Generate index
+        if: ${{ env.IS_SYNC == 'true' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mmrl-util index --push
 
-      - name: Show versions
+      - name: Show latest versions
+        if: ${{ env.IS_SYNC != 'true' }}
         run: |
-          if [ -f versions_diff.md ]; then
-            echo "## Versions" >> "$GITHUB_STEP_SUMMARY"
-            cat versions_diff.md >> "$GITHUB_STEP_SUMMARY"
-          fi
+          mmrl-util index --list
 
       - name: Upload logs
         if: always()
@@ -83,8 +115,10 @@ jobs:
     needs: sync
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
