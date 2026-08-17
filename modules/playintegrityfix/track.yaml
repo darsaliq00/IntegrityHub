@@ -1,5 +1,8 @@
 id: playintegrityfix
 enable: true
 verified: false
+update_to: update.json
 source: https://github.com/KOWX712/PlayIntegrityFix
-update_to: https://raw.githubusercontent.com/KOWX712/PlayIntegrityFix/main/update.json
+homepage: https://github.com/KOWX712/PlayIntegrityFix
+support: https://github.com/KOWX712/PlayIntegrityFix/issues
+license: GPL-3.0
