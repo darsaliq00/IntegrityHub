@@ -10,7 +10,7 @@ on:
         description: "Run Sync"
         type: choice
         required: true
-        default: "No"
+        default: "Yes"
         options:
           - "Yes"
           - "No"
@@ -53,6 +53,90 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install mmrl-util
+
+      - name: Update PlayIntegrityFix metadata
+        if: ${{ env.IS_SYNC == 'true' }}
+        run: |
+          python <<'PY'
+          import json
+          import time
+          import urllib.request
+          from pathlib import Path
+
+          source_url = "https://raw.githubusercontent.com/KOWX712/PlayIntegrityFix/main/update.json"
+          output_file = Path("modules/playintegrityfix/update.json")
+
+          print("Downloading upstream PlayIntegrityFix update.json...")
+          with urllib.request.urlopen(source_url, timeout=30) as response:
+              upstream = json.load(response)
+
+          version = upstream["version"]
+          version_code = int(upstream["versionCode"])
+          zip_url = upstream["zipUrl"]
+          changelog = upstream.get(
+              "changelog",
+              "https://raw.githubusercontent.com/KOWX712/PlayIntegrityFix/main/changelog.md"
+          )
+
+          print(f"Upstream version: {version}")
+          print(f"Upstream versionCode: {version_code}")
+
+          existing = {
+              "id": "playintegrityfix",
+              "timestamp": 0,
+              "versions": []
+          }
+
+          if output_file.exists():
+              try:
+                  with output_file.open("r", encoding="utf-8") as f:
+                      existing = json.load(f)
+              except Exception:
+                  pass
+
+          versions = existing.get("versions", [])
+
+          # Remove an existing copy of the same version.
+          versions = [
+              item for item in versions
+              if int(item.get("versionCode", -1)) != version_code
+          ]
+
+          # Add newest version first.
+          versions.insert(
+              0,
+              {
+                  "timestamp": int(time.time()),
+                  "version": version,
+                  "versionCode": version_code,
+                  "zipUrl": zip_url,
+                  "changelog": changelog
+              }
+          )
+
+          # Keep a reasonable history.
+          versions = versions[:100]
+
+          result = {
+              "id": "playintegrityfix",
+              "timestamp": int(time.time()),
+              "versions": versions
+          }
+
+          output_file.parent.mkdir(parents=True, exist_ok=True)
+
+          with output_file.open("w", encoding="utf-8") as f:
+              json.dump(result, f, indent=2)
+              f.write("\n")
+
+          print("Generated:")
+          print(output_file)
+          PY
+
+      - name: Show PlayIntegrityFix update data
+        if: ${{ env.IS_SYNC == 'true' }}
+        run: |
+          cat modules/playintegrityfix/update.json
 
       - name: Sync
         if: ${{ env.IS_SYNC == 'true' }}
