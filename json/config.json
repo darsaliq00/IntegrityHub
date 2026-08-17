@@ -1,12 +1,12 @@
 {
-  "name": "Template Magisk Modules Repository",
-  "website": null,
-  "support": null,
+  "name": "IntegrityHub",
+  "website": "https://github.com/darsaliq00/IntegrityHub",
+  "support": "https://github.com/darsaliq00/IntegrityHub/issues",
   "donate": null,
   "submission": null,
-  "base_url": "https://example.com/",
-  "description": null,
-  "max_num": 2,
+  "base_url": "https://darsaliq00.github.io/IntegrityHub/",
+  "description": "Curated Play Integrity and Android root modules for MMRL.",
+  "max_num": 100,
   "enable_log": true,
   "log_dir": "log"
 }
