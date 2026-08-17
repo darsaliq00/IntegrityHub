@@ -1,6 +1,13 @@
 {
-  "version": "v19.2",
-  "versionCode": 19200,
-  "zipUrl": "https://github.com/KOWX712/PlayIntegrityFix/releases/download/v19.2-Final/PlayIntegrityFix_v19.2.zip",
-  "changelog": "https://github.com/KOWX712/PlayIntegrityFix/releases/tag/v19.2-Final"
+  "id": "playintegrityfix",
+  "timestamp": 1786990118,
+  "versions": [
+    {
+      "timestamp": 1786990118,
+      "version": "v19.2",
+      "versionCode": 19200,
+      "zipUrl": "https://github.com/KOWX712/PlayIntegrityFix/releases/download/v19.2-Final/PlayIntegrityFix_v19.2.zip",
+      "changelog": "https://github.com/KOWX712/PlayIntegrityFix/releases/tag/v19.2-Final"
+    }
+  ]
 }
