@@ -1,52 +1,48 @@
-# Template Magisk Modules Repository
+# IntegrityHub - MMRL Module Repository
 
-> [!IMPORTANT]
-> Do not fork this repository if you want to create your own Magisk Modules Repository, use the **Use this template** button instead
+IntegrityHub is an automated repository that curates and maintains Play Integrity and Android root modules for MMRL (Magisk Module Repository Loader).
 
-A template repository to generate your own Magisk Modules Repository
+## Features
 
-## Directory and File Overview:
+- **Automated Updates**: GitHub Actions runs every 6 hours to sync modules from their original sources
+- **No Manual Downloads**: Modules are automatically pulled from their original developers' GitHub releases
+- **Attribution**: Full credit to original module developers is maintained
+- **Open Source**: All code is open source and available for the community
 
-1. **Root Level**
+## Supported Modules
 
-   - The root contains the main folders (`assets`, `json`, `log`, and `modules`) and serves as the entry point for the repository.
+- **PlayIntegrityFix** - Fix Play Integrity verdicts
 
-2. **`assets/`**
+More modules coming soon!
 
-   - Contains media assets related to the repository.
-   - `cover.webp`: Likely an image used as a cover or thumbnail. This cover image should be always `*.webp` with a size of **1024x500**.
+## How It Works
 
-3. **`json/`**
+1. Each module has a `track.yaml` file that specifies its source repository
+2. GitHub Actions automatically checks for new releases every 6 hours
+3. When updates are found, `mmrl-util` downloads the modules and generates metadata
+4. The repository is deployed to GitHub Pages for MMRL to access
 
-   - Houses configuration and module metadata in JSON format.
-   - `config.json`: Probably holds repository-wide settings.
-   - `modules.json`: Likely a listing or metadata for all modules in the repository.
+## Adding to MMRL
 
-4. **`log/`**
+Add this repository URL to MMRL:
+```
+https://darsaliq00.github.io/IntegrityHub/
+```
 
-   - Stores logs for repository operations or updates.
-   - `sync_2025-01-04.log`: A log file for synchronization activities, possibly capturing recent updates or actions.
+## Contributing
 
-5. **`modules/`**
+To add new modules to this repository, please:
 
-   - Main directory for individual Magisk modules.
-   - Each module is organized in its own subfolder.
+1. Open an issue with the module GitHub repository link
+2. Ensure the module has proper release tags and update information
+3. The module will be evaluated for compatibility and added if appropriate
 
-6. **`modules/bindhosts/`**
+## License
 
-   - A specific module (e.g., "bindhosts") with the following files:
-     - `track.yaml`: Likely tracks updates or version history.
-     - `update.json`: Contains update details or changelogs.
-     - `v1.8.5_185.md`: Documentation or release notes for version `v1.8.5_185`.
-     - `v1.8.5_185.zip`: The module's distributable ZIP file for version `v1.8.5_185`.
+This repository is licensed under GPL-3.0. Individual modules retain their original licenses.
 
-7. **`modules/mmrl_wpd/`**
-   - Another module ("mmrl_wpd") with similar structure:
-     - `4.7.7_459.zip`: Distributable ZIP file for version `4.7.7_459`.
-     - `track.yaml`: Tracks updates or history.
-     - `update.json`: Contains update metadata.
+## Credits
 
-
-## More
-
-Learn more at the [Googlers-Repo/magisk-modules-repo-util](https://github.com/Googlers-Repo/magisk-modules-repo-util) repository.
+- MMRL Team for the module manager
+- Module developers for their excellent work
+- mmrl-util for automated synchronization
